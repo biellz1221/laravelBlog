@@ -20,7 +20,7 @@
             <tabela-lista 
                 :titulos="['#', 'Título', 'Descrição', 'Autor', 'Data']"
                 :itens="{{$listaArtigos}}"
-                criar="#criar" detalhe="#detalhe" editar="#editar" deletar="#deletar" token=""
+                criar="#criar" detalhe="/admin/artigos/" editar="/admin/artigos/" deletar="#deletar" token=""
                 ordem="asc" ordemcol="1" modal="sim"
             ></tabela-lista>
         </painel>
@@ -54,7 +54,7 @@
     </modal>
 
     <modal nome="editar" titulo="Editar">
-        <formulario id="formEditar" css="" action="#" method="put" enctype="multipart/form-data" token="168118816156">
+        <formulario id="formEditar" css="" :action="'/admin/artigos/' + $store.state.item.id" method="put" enctype="" token="{{csrf_token()}}">
             <div class="form-group">
                 <label for="titulo">Título</label>
                 <input type="text" name="titulo" class="form-control" v-model="$store.state.item.titulo" id="titulo" placeholder="Titulo">
