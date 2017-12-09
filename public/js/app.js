@@ -44442,8 +44442,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['titulos', 'itens', 'criar', 'detalhe', 'editar', 'deletar', 'token', 'ordem', 'ordemcol', 'modal'],
@@ -44617,7 +44615,7 @@ var render = function() {
                           {
                             attrs: {
                               id: index,
-                              action: _vm.deletar,
+                              action: _vm.deletar + item.id,
                               method: "POST"
                             }
                           },
@@ -45217,7 +45215,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get(this.url + this.item.id).then(function (res) {
                 _this.$store.commit('setItem', res.data);
             });
-            // this.$store.commit('setItem', this.item);
         }
     }
 });
