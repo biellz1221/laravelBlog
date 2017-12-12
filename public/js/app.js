@@ -44442,6 +44442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['titulos', 'itens', 'criar', 'detalhe', 'editar', 'deletar', 'token', 'ordem', 'ordemcol', 'modal'],
@@ -44450,6 +44451,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             buscar: '',
             ordemAux: this.ordem || "asc",
             ordemAuxCol: this.ordemcol || 0
+
         };
     },
     methods: {
@@ -44469,13 +44471,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         lista: function lista() {
             var _this = this;
 
+            var lst = this.itens.data;
             var ordem = this.ordemAux;
             var ordemCol = this.ordemAuxCol;
             ordem = ordem.toLowerCase();
             ordemCol = parseInt(ordemCol);
 
             if (ordem == "asc") {
-                this.itens.sort(function (a, b) {
+                lst.sort(function (a, b) {
                     if (Object.values(a)[ordemCol] > Object.values(b)[ordemCol]) {
                         return 1;
                     };
@@ -44485,7 +44488,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return 0;
                 });
             } else {
-                this.itens.sort(function (a, b) {
+                lst.sort(function (a, b) {
                     if (Object.values(a)[ordemCol] < Object.values(b)[ordemCol]) {
                         return 1;
                     };
@@ -44497,7 +44500,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             if (this.buscar) {
-                return this.itens.filter(function (res) {
+                return lst.filter(function (res) {
                     res = Object.values(res);
                     for (var k = 0; k < res.length; k++) {
                         if ((res[k] + "").toLowerCase().indexOf(_this.buscar.toLowerCase()) >= 0) {
@@ -44507,7 +44510,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return false;
                 });
             };
-            return this.itens;
+            return lst;
         }
     }
 });
@@ -44614,9 +44617,10 @@ var render = function() {
                           "form",
                           {
                             attrs: {
+                              role: "form",
                               id: index,
                               action: _vm.deletar + item.id,
-                              method: "POST"
+                              method: _vm.POST
                             }
                           },
                           [
@@ -45454,7 +45458,8 @@ var render = function() {
       attrs: {
         action: _vm.action,
         method: _vm.defineMetodo,
-        enctype: _vm.enctype
+        enctype: _vm.enctype,
+        role: "form"
       }
     },
     [

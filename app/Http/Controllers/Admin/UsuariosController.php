@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Artigo;
+use Illuminate\Validation\Rule;
+use App\User;
 
-class ArtigosController extends Controller
+class UsuariosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,12 +19,12 @@ class ArtigosController extends Controller
     {
         $listaMigalhas = json_encode([
             ["titulo" => "Home", "url" => route("home")],
-            ["titulo" => "Lista de Artigos", "url" => ""],
+            ["titulo" => "Lista de Usuários", "url" => ""],
         ]);
 
-        $listaArtigos = Artigo::select('id','titulo','descricao','autor','data')->paginate(2);
+        $listaModelo= User::select('id','name','email')->paginate(2);
 
-        return view('admin.artigos.index',compact("listaMigalhas", "listaArtigos"));
+        return view('admin.usuarios.index',compact("listaMigalhas", "listaModelo"));
     }
 
     /**
@@ -46,16 +47,17 @@ class ArtigosController extends Controller
     {
         $data = $request -> all();
         $validacao = \Validator::make($data, [
-            "titulo" => "required",
-            "autor" => "required",
-            "descricao" => "required",
-            "conteudo" => "required",
-            "data" => "required",
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
         if($validacao->fails()){
             return redirect()->back()->withErrors($validacao)->withInput();
         }
-        Artigo::create($data);
+
+        $data['password'] = bcrypt($data['password']);
+
+        User::create($data);
         return redirect() -> back();
     }
 
@@ -67,7 +69,7 @@ class ArtigosController extends Controller
      */
     public function show($id)
     {
-        return Artigo::find($id);
+        return User::find($id);
     }
 
     /**
@@ -91,17 +93,31 @@ class ArtigosController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request -> all();
+
+        if(isset($data['password']) && $data['password'] != ''){
+            $validacao = \Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => ['required', 'string','email', 'max:255', Rule::unique('users')->ignore($id)],
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            $validacao = \Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => ['required', 'string','email', 'max:255', Rule::unique('users')->ignore($id)],
+            ]);
+            unset($data['password']);
+        }
+
         $validacao = \Validator::make($data, [
-            "titulo" => "required",
-            "autor" => "required",
-            "descricao" => "required",
-            "conteudo" => "required",
-            "data" => "required",
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
         if($validacao->fails()){
             return redirect()->back()->withErrors($validacao)->withInput();
         }
-        Artigo::find($id)->update($data);
+        User::find($id)->update($data);
         return redirect()->back();
     }
 
@@ -113,7 +129,7 @@ class ArtigosController extends Controller
      */
     public function destroy($id)
     {
-        Artigo::find($id)->delete();
+        User::find($id)->delete();
         return redirect() -> back();
     }
 }

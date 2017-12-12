@@ -16,13 +16,15 @@
 
         <painel titulo="Lista de Artigos" cor="panel-default">
         <migalhas :lista="{{$listaMigalhas}}"></migalhas>
-        
             <tabela-lista 
                 :titulos="['#', 'Título', 'Descrição', 'Autor', 'Data']"
-                :itens="{{$listaArtigos}}"
+                :itens="{{json_encode($listaArtigos)}}"
                 criar="#criar" detalhe="/admin/artigos/" editar="/admin/artigos/" deletar="/admin/artigos/" token="{{csrf_token()}}"
                 ordem="asc" ordemcol="1" modal="sim"
             ></tabela-lista>
+            <div align="center">
+                {{$listaArtigos->links()}}
+            </div>
         </painel>
     </pagina>
     <modal nome="adicionar" titulo="Adicionar">

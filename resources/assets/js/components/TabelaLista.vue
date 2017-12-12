@@ -7,7 +7,6 @@
                 <input type="search" class="form-control" placeholder="Buscar..." v-model="buscar">
             </div>
         </div>
-
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
@@ -18,8 +17,10 @@
             <tbody>
                 <tr v-for="(item, index) in lista" :key="index">
                     <td v-for="(i,index) in item" :key="index">{{i}}</td>
+
+
                     <td v-if="detalhe || editar || deletar">
-                        <form v-bind:id="index" v-if="deletar && token" v-bind:action="deletar + item.id" method="POST">
+                        <form role="form" v-bind:id="index" v-if="deletar && token" v-bind:action="deletar + item.id" :method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" v-bind:value="token">
                             
@@ -61,7 +62,8 @@ export default {
         return {
             buscar: '',
             ordemAux: this.ordem || "asc",
-            ordemAuxCol: this.ordemcol || 0
+            ordemAuxCol: this.ordemcol || 0,
+            
         }
     },
     methods: {
@@ -79,20 +81,20 @@ export default {
     },
     computed: {
         lista: function(){
-
+            let lst = this.itens.data
             let ordem = this.ordemAux;
             let ordemCol = this.ordemAuxCol;
             ordem = ordem.toLowerCase();
             ordemCol = parseInt(ordemCol);
 
             if (ordem == "asc") {
-                this.itens.sort(function(a,b){
+                lst.sort(function(a,b){
                     if (Object.values(a)[ordemCol] > Object.values(b)[ordemCol]) {return 1};
                     if (Object.values(a)[ordemCol] < Object.values(b)[ordemCol]) {return -1};
                     return 0;
                 })
             } else {
-                this.itens.sort(function(a,b){
+                lst.sort(function(a,b){
                     if (Object.values(a)[ordemCol] < Object.values(b)[ordemCol]) {return 1};
                     if (Object.values(a)[ordemCol] > Object.values(b)[ordemCol]) {return -1};
                     return 0;
@@ -100,7 +102,7 @@ export default {
             }
 
             if(this.buscar) {
-                return this.itens.filter(res => {
+                return lst.filter(res => {
                     res = Object.values(res);
                     for (let k = 0; k < res.length; k++) {
                         if ((res[k]+"").toLowerCase().indexOf(this.buscar.toLowerCase()) >= 0) {
@@ -110,7 +112,7 @@ export default {
                     return false
                 });
             };
-            return this.itens;
+            return lst;
         }
     }
 }

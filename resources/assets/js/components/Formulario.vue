@@ -1,5 +1,5 @@
 <template>
-    <form :class="css" :action="action" :method="defineMetodo" :enctype="enctype">
+    <form :class="css" :action="action" :method="defineMetodo" :enctype="enctype" role="form">
         <input v-if="alterMethod" type="hidden" name="_method" :value="alterMethod">
         <input v-if="token" type="hidden" name="_token" :value="token">
         <slot></slot>
